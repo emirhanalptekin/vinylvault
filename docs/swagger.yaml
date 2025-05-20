@@ -1,0 +1,257 @@
+definitions:
+  models.Album:
+    properties:
+      artist:
+        $ref: '#/definitions/models.Artist'
+      artist_id:
+        type: string
+      condition:
+        $ref: '#/definitions/models.AlbumCondition'
+      genre:
+        $ref: '#/definitions/models.Genre'
+      genre_id:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      rating:
+        description: 1-5 stars
+        type: integer
+      release_year:
+        type: string
+      title:
+        type: string
+    type: object
+  models.AlbumCondition:
+    enum:
+    - Mint
+    - Excellent
+    - Very Good
+    - Good
+    - Fair
+    - Poor
+    type: string
+    x-enum-varnames:
+    - ConditionMint
+    - ConditionExcellent
+    - ConditionVeryGood
+    - ConditionGood
+    - ConditionFair
+    - ConditionPoor
+  models.Artist:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Genre:
+    properties:
+      icon:
+        description: Could be an emoji
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      description: Check if the API is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check
+      tags:
+      - system
+  /albums:
+    get:
+      description: Retrieve all albums in the collection
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Album'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all albums
+      tags:
+      - albums
+    post:
+      consumes:
+      - application/json
+      description: Add a new album to the collection
+      parameters:
+      - description: Album Data
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.Album'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new album
+      tags:
+      - albums
+  /albums/{id}:
+    delete:
+      description: Remove an album from the collection
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Delete an album
+      tags:
+      - albums
+    get:
+      description: Retrieve a specific album by its ID
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get album by ID
+      tags:
+      - albums
+    put:
+      consumes:
+      - application/json
+      description: Update an existing album's information
+      parameters:
+      - description: Album ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Album Data
+        in: body
+        name: album
+        required: true
+        schema:
+          $ref: '#/definitions/models.Album'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Update an album
+      tags:
+      - albums
+  /artists:
+    get:
+      description: Retrieve all artists in the collection
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Artist'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all artists
+      tags:
+      - artists
+  /genres:
+    get:
+      description: Retrieve all music genres in the collection
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Genre'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get all genres
+      tags:
+      - genres
+swagger: "2.0"

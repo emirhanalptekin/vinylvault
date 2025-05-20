@@ -1,0 +1,2 @@
+# Exclude swagger docs from build context
+docs/

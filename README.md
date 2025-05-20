@@ -9,6 +9,7 @@ VinylVault is a simple REST API for managing your vinyl record collection. It pr
 - Docker containerization for easy deployment
 - PostgreSQL database for data storage
 - Comprehensive testing suite (unit and integration tests)
+- Swagger documentation for API endpoints
 
 ## Technology Stack
 
@@ -16,6 +17,7 @@ VinylVault is a simple REST API for managing your vinyl record collection. It pr
 - **Database**: PostgreSQL
 - **Containerization**: Docker and Docker Compose
 - **Testing**: Go's built-in testing package
+- **API Documentation**: Swagger/OpenAPI
 
 ## Architecture
 
@@ -45,6 +47,7 @@ docker-compose up -d
 ```
 
 The API will be available at http://localhost:8080
+Swagger UI will be available at http://localhost:8080/swagger/index.html
 
 ### Running Locally without Docker
 
@@ -54,6 +57,25 @@ The API will be available at http://localhost:8080
 
 ```bash
 go run cmd/main.go
+```
+
+## API Documentation
+
+API documentation is available via Swagger UI when the server is running:
+
+- **URL**: http://localhost:8080/swagger/index.html
+
+This provides:
+- Interactive documentation for all endpoints
+- Request/response schema information
+- Ability to test endpoints directly from the browser
+
+### Manually Generating Swagger Documentation
+
+You can regenerate the Swagger documentation with:
+
+```bash
+swag init -g cmd/main.go -o ./docs
 ```
 
 ## API Endpoints
@@ -90,7 +112,4 @@ The project follows a standard Go project layout:
 - `internal/`: Private application code
 - `pkg/`: Public libraries
 - `tests/`: Integration tests
-
-## Documentation
-
-API documentation is available at the `/swagger/index.html` endpoint when the server is running.
+- `docs/`: Generated Swagger documentation
