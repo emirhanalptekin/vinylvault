@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: vinylvault-postgres
+    environment:
+      POSTGRES_DB: vinylvault
+      POSTGRES_USER: vinylvault
+      POSTGRES_PASSWORD: vinylvault
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vinylvault"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vinylvault-app
+    environment:
+      VINYLVAULT_DATABASE_URL: postgres://vinylvault:vinylvault@postgres:5432/vinylvault?sslmode=disable
+      VINYLVAULT_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,2 @@
+db_url: "postgres://vinylvault:vinylvault@127.0.0.1:5432/vinylvault?sslmode=disable"
+port: "5050"
